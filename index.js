@@ -13,7 +13,8 @@ const handleCategory = async() => {
     trimmedData.forEach(category => {
         const div = document.createElement("div");
         div.innerHTML = `
-        <a onclick="handleLoadNews('${category.category_id}')" class="tab">${category.category_name}</a>
+        
+        <a onclick=handleLoadNews('${category.category_id}') class="tab">${category.category_name}</a>
         `;
 
         tabContainer.appendChild(div);
@@ -86,7 +87,7 @@ const handleLoadNews = async (categoryId) => {
             </div>
             <div class="card-detailed-btn">
             
-            <button class="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition-duration-200 ease-in-out hover:bg-gray-900">
+            <button onclick="handleModal('${news._id}')" class="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition-duration-200 ease-in-out hover:bg-gray-900">
             Details
             </button>
             </div>
@@ -101,6 +102,41 @@ const handleLoadNews = async (categoryId) => {
         });
 };
 
+const handleModal = async (newsID) => {
+    console.log(newsID);
+
+
+    const response = await fetch(` https://openapi.programming-hero.com/api/news/${newsID}`);
+    const data = await response.json();
+    console.log(data.data[0]);
+
+    const modalContainer = document.getElementById("modal-container");
+
+    const div = document.createElement("div");
+
+    div.innerHTML = 
+    
+    `
+    <dialog id="my_modal_1" class="modal">
+    <form method="dialog" class="modal-box">
+    
+    <h3 class="font-bold text-lg">Hello!</h3>
+    <p class="py-4">Press ESC key or click the button below to close</p>
+    <div class="modal-action">
+      <!-- if there is a button in form, it will close the modal -->
+      <button class="btn">Close</button>
+    </div>
+    </form>
+    </dialog>
+    `;
+
+
+    modalContainer.appendChild(div);
+
+    const modal = document.getElementById("my_modal_1");
+
+    modal.showModal();
+}; 
 
 
 handleCategory();
